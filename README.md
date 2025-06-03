@@ -104,5 +104,58 @@ After creation, select the volume > Actions > Attach Volume:
 Select the EC2 instance
 
 ------------------------------------------------------------------------------------
+variable "region" {
+  description = "AWS region"
+  type        = string
+  default     = "us-east-1"
+}
 
+variable "ami_id" {
+  description = "AMI ID"
+  type        = string
+  default     = "ami-0953476d60561c955"
+}
+
+variable "instance_type" {
+  description = "EC2 instance type"
+  type        = string
+  default     = "t2.micro"
+}
+
+variable "instance_name" {
+  description = "EC2 Name tag"
+  type        = string
+  default     = "terraform-instance"
+}                                                               
+
+----
+output "instance_id" {
+  value = aws_instance.instance_1.id
+}
+
+output "public_ip" {
+  value = aws_instance.instance_1.public_ip
+}
+
+output "private_ip" {
+  value = aws_instance.instance_1.private_ip
+}
+
+output "instance_ami" {
+  value = aws_instance.instance_1.ami
+}
+
+---
+provider "aws" {
+  region = var.region
+}
+
+resource "aws_instance" "instance_1" {
+  ami           = var.ami_id
+  instance_type = var.instance_type
+
+  tags = {
+    Name = var.instance_name
+  }
+}
 
